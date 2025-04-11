@@ -1,0 +1,16 @@
+/* Avatar.css */
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 50%;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.avatar:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
