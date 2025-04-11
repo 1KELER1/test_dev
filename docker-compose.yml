@@ -17,7 +17,8 @@ services:
         container_name: sn_django
         command: /app/docker/start.sh server
         depends_on:
-            - postgres
+            postgres:
+                condition: service_healthy
         env_file:
             - .env
         ports:
@@ -26,14 +27,27 @@ services:
             - .:/app
             - static_files:/app/static:rw
             - media_files:/app/media:rw
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:8000/health/"]
+            interval: 30s
+            timeout: 10s
+            retries: 3
 
     postgres:
         image: postgres:13.3-alpine
         hostname: sn-postgres
+        container_name: sn_postgres
+        ports:
+            - "5432:5432"
         volumes:
             - app_data:/var/lib/postgresql/data
         env_file:
             - .env
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
     
     
     
