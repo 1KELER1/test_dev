@@ -25,7 +25,7 @@ services:
     django:
         build:
             context: .
-            dockerfile: docker/Dockerfile
+            dockerfile: Dockerfile
         container_name: sn_django
         command: python manage.py runserver 0.0.0.0:8000
         volumes:
