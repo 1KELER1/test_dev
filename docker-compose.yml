@@ -1,5 +1,3 @@
-version: "3.8"
-
 volumes:
     static_files:
         name: sn_static_files
