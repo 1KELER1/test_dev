@@ -4,13 +4,7 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends \
-    build-essential \
-    libpq-dev \
-    postgresql-client \
-    gcc \
-    python3-dev \
-    musl-dev \
+  && apt-get install -y --no-install-recommends build-essential libpq-dev \
   && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade pip
@@ -23,10 +17,10 @@ RUN pip install --no-cache-dir -r /tmp/requirements.txt \
     && install -d -m 0755 -o app_user -g app_user /app/media
 
 WORKDIR /app
-COPY . .
+USER app_user:app_user
+COPY --chown=app_user:app_user . .
 RUN chmod +x docker/*.sh
 RUN chmod +x docker/entrypoint.sh
-USER app_user:app_user
 
 ENTRYPOINT [ "docker/entrypoint.sh" ]
 CMD [ "docker/start.sh", "server" ]
