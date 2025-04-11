@@ -3,6 +3,8 @@ volumes:
         name: sn_static_files
     media_files:
         name: sn_media_files
+    app_data:
+        name: sn_app_data
 
 services:
     django:
