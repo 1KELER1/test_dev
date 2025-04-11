@@ -5,8 +5,8 @@ volumes:
         name: sn_static_files
     media_files:
         name: sn_media_files
-    app_data:
-        name: sn_app_data
+    postgres_data:
+        name: sn_postgres_data
 
 services:
     postgres:
@@ -15,9 +15,9 @@ services:
         environment:
             POSTGRES_DB: snpostgres
             POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: 9911
+            POSTGRES_PASSWORD: postgres
         volumes:
-            - app_data:/var/lib/postgresql/data
+            - postgres_data:/var/lib/postgresql/data
         networks:
             - sn_network
         restart: always
@@ -35,7 +35,7 @@ services:
             - POSTGRES_HOST=sn_postgres
             - POSTGRES_PORT=5432
             - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=9911
+            - POSTGRES_PASSWORD=postgres
             - POSTGRES_DATABASE=snpostgres
             - DEBUG=True
             - SECRET_KEY=django-insecure-123
