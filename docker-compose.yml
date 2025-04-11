@@ -31,16 +31,8 @@ services:
         volumes:
             - static_files:/app/static
             - media_files:/app/media
-        environment:
-            - DEBUG=1
-            - SECRET_KEY=django-insecure-123
-            - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
-            - SQL_ENGINE=django.db.backends.postgresql
-            - SQL_DATABASE=snpostgres
-            - SQL_USER=postgres
-            - SQL_PASSWORD=postgres
-            - SQL_HOST=postgres
-            - SQL_PORT=5432
+        env_file:
+            - .env
         depends_on:
             - postgres
         networks:
