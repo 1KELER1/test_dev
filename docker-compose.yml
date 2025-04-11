@@ -31,8 +31,15 @@ services:
         volumes:
             - static_files:/app/static
             - media_files:/app/media
-        env_file:
-            - .env
+        environment:
+            - POSTGRES_HOST=sn_postgres
+            - POSTGRES_PORT=5432
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=9911
+            - POSTGRES_DATABASE=snpostgres
+            - DEBUG=True
+            - SECRET_KEY=django-insecure-123
+            - ALLOWED_HOSTS=localhost,127.0.0.1
         depends_on:
             - postgres
         networks:

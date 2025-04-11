@@ -33,6 +33,14 @@ env = environ.Env(
 
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
+# Debug print for environment variables
+print("Environment variables:")
+print(f"POSTGRES_HOST: {env('POSTGRES_HOST')}")
+print(f"POSTGRES_PORT: {env('POSTGRES_PORT')}")
+print(f"POSTGRES_USER: {env('POSTGRES_USER')}")
+print(f"POSTGRES_PASSWORD: {env('POSTGRES_PASSWORD')}")
+print(f"POSTGRES_DATABASE: {env('POSTGRES_DATABASE')}")
+
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
