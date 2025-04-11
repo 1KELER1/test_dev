@@ -1,3 +1,5 @@
+version: '3.8'
+
 volumes:
     static_files:
         name: sn_static_files
@@ -7,58 +9,63 @@ volumes:
         name: sn_app_data
 
 services:
+    postgres:
+        image: postgres:15
+        container_name: sn_postgres
+        environment:
+            POSTGRES_DB: snpostgres
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+        volumes:
+            - app_data:/var/lib/postgresql/data
+        networks:
+            - sn_network
+        restart: always
+
     django:
         build:
             context: .
-            dockerfile: Dockerfile
-        image: sn:development
+            dockerfile: docker/Dockerfile
         container_name: sn_django
-        command: /app/docker/start.sh server
-        env_file:
-            - .env
-        ports:
-            - 8000:8000
-        volumes:       
-            - .:/app
-            - static_files:/app/static:rw
-            - media_files:/app/media:rw
-        network_mode: host
-        healthcheck:
-            test: ["CMD", "curl", "-f", "http://localhost:8000/health/"]
-            interval: 30s
-            timeout: 10s
-            retries: 3
+        command: python manage.py runserver 0.0.0.0:8000
+        volumes:
+            - static_files:/app/static
+            - media_files:/app/media
+        environment:
+            - DEBUG=1
+            - SECRET_KEY=django-insecure-123
+            - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+            - SQL_ENGINE=django.db.backends.postgresql
+            - SQL_DATABASE=snpostgres
+            - SQL_USER=postgres
+            - SQL_PASSWORD=postgres
+            - SQL_HOST=postgres
+            - SQL_PORT=5432
+        depends_on:
+            - postgres
+        networks:
+            - sn_network
+        restart: always
 
     nginx:
         build:
-            context: ./nginx
-            dockerfile: Dockerfile
-        image: sn_nginx:development
+            context: .
+            dockerfile: docker/nginx/Dockerfile
         container_name: sn_nginx
-        ports:
-            - 80:80
         volumes:
-            - static_files:/app/static:ro
-            - media_files:/app/media:ro
+            - static_files:/app/static
+            - media_files:/app/media
+        ports:
+            - "80:80"
         depends_on:
             - django
-        network_mode: host
+        networks:
+            - sn_network
+        restart: always
 
-    postgres:
-        image: postgres:13.3-alpine
-        hostname: sn-postgres
-        container_name: sn_postgres
-        ports:
-            - "5433:5432"
-        volumes:
-            - app_data:/var/lib/postgresql/data
-        env_file:
-            - .env
-        healthcheck:
-            test: ["CMD-SHELL", "pg_isready -U postgres"]
-            interval: 5s
-            timeout: 5s
-            retries: 5
+networks:
+    sn_network:
+        driver: bridge
     
     
     
