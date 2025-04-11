@@ -4,7 +4,13 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends build-essential libpq-dev \
+  && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    postgresql-client \
+    gcc \
+    python3-dev \
+    musl-dev \
   && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade pip
