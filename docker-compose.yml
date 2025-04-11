@@ -20,8 +20,7 @@ services:
             - .:/app
             - static_files:/app/static:rw
             - media_files:/app/media:rw
-        extra_hosts:
-            - "host.docker.internal:host-gateway"
+        network_mode: host
         healthcheck:
             test: ["CMD", "curl", "-f", "http://localhost:8000/health/"]
             interval: 30s
