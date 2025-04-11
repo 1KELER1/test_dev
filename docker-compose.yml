@@ -49,8 +49,8 @@ services:
 
     nginx:
         build:
-            context: .
-            dockerfile: docker/nginx/Dockerfile
+            context: ./docker/nginx
+            dockerfile: Dockerfile
         container_name: sn_nginx
         volumes:
             - static_files:/app/static
