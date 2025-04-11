@@ -23,10 +23,10 @@ RUN pip install --no-cache-dir -r /tmp/requirements.txt \
     && install -d -m 0755 -o app_user -g app_user /app/media
 
 WORKDIR /app
-USER app_user:app_user
-COPY --chown=app_user:app_user . .
+COPY . .
 RUN chmod +x docker/*.sh
 RUN chmod +x docker/entrypoint.sh
+USER app_user:app_user
 
 ENTRYPOINT [ "docker/entrypoint.sh" ]
 CMD [ "docker/start.sh", "server" ]
