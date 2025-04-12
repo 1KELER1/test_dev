@@ -9,52 +9,68 @@ volumes:
         name: sn_postgres_data
 
 services:
-    postgres:
-        image: postgres:15
+    db:
+        image: postgres:13
         container_name: sn_postgres
         environment:
-            POSTGRES_DB: snpostgres
+            POSTGRES_DB: postgres
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
         volumes:
             - postgres_data:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
         networks:
             - sn_network
         restart: always
 
-    django:
-        build:
-            context: .
-            dockerfile: Dockerfile
+    backend:
+        build: ./backend
         container_name: sn_django
         command: >
-          sh -c "python manage.py collectstatic --noinput &&
-                 python manage.py migrate &&
-                 python manage.py createsuperuser --noinput --username $DJANGO_SUPERUSER_USERNAME --email $DJANGO_SUPERUSER_EMAIL || true &&
-                 python manage.py runserver 0.0.0.0:8000"
+            sh -c "python manage.py migrate &&
+                   python manage.py runserver 0.0.0.0:8000"
         volumes:
-            - static_files:/app/static:rw
-            - media_files:/app/media:rw
+            - ./backend:/app
         env_file:
             - .env
         depends_on:
-            - postgres
+            - db
+        networks:
+            - sn_network
+        restart: always
+        environment:
+            - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
+            - DEBUG=1
+            - SECRET_KEY=django-insecure-your-secret-key-here
+
+    frontend:
+        build: ./frontend
+        container_name: sn_frontend
+        volumes:
+            - ./frontend:/app
+            - /app/node_modules
+        ports:
+            - "3000:3000"
+        environment:
+            - REACT_APP_API_URL=http://localhost:8000
+        depends_on:
+            - backend
         networks:
             - sn_network
         restart: always
 
     nginx:
-        build:
-            context: ./docker/nginx
-            dockerfile: Dockerfile
+        image: nginx:1.21-alpine
         container_name: sn_nginx
         volumes:
-            - static_files:/app/static:ro
-            - media_files:/app/media:ro
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./nginx/conf.d:/etc/nginx/conf.d:ro
         ports:
             - "80:80"
         depends_on:
-            - django
+            - backend
+            - frontend
         networks:
             - sn_network
         restart: always
