@@ -62,7 +62,10 @@ services:
         restart: always
 
     frontend:
-        build: ./frontend
+        build: 
+            context: ./frontend
+            args:
+                - REACT_APP_API_URL=http://5.104.75.36/api
         ports:
             - "3000:80"
         environment:

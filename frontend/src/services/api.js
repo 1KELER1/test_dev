@@ -1,8 +1,11 @@
 import axios from "axios";
 import { getRefreshToken } from "./endpoints/users";
 
+// Используем переменную окружения или дефолтное значение
+const API_URL = process.env.REACT_APP_API_URL || '/api';
+
 const api = axios.create({
-  baseURL: "http://localhost:8000/api",
+  baseURL: API_URL,
   timeout: 5000,
   headers: {
     "Content-Type": "application/json",
