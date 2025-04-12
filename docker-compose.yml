@@ -29,27 +29,14 @@ services:
         container_name: sn_django
         command: >
           sh -c "python manage.py collectstatic --noinput &&
+                 python manage.py migrate &&
+                 python manage.py createsuperuser --noinput --username $DJANGO_SUPERUSER_USERNAME --email $DJANGO_SUPERUSER_EMAIL || true &&
                  python manage.py runserver 0.0.0.0:8000"
         volumes:
             - static_files:/app/static:rw
             - media_files:/app/media:rw
-        environment:
-            - DEBUG=True
-            - SECRET_KEY=udaisdfaiwurd81672r615162358125@@@!*@%3815200---12321
-            - EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
-            - EMAIL_HOST=smtp.gmail.com
-            - EMAIL_PORT=587
-            - EMAIL_USE_TLS=True
-            - EMAIL_HOST_USER=example@gmail.com
-            - EMAIL_HOST_PASSWORD=maple@123
-            - POSTGRES_HOST=sn_postgres
-            - POSTGRES_PORT=5432
-            - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=postgres
-            - POSTGRES_DATABASE=snpostgres
-            - DOMAIN=http://127.0.0.1:8000
-            - EMAIL=example@gmail.com
-            - ALLOWED_HOSTS=127.0.0.1,localhost,0.0.0.0,5.104.75.36
+        env_file:
+            - .env
         depends_on:
             - postgres
         networks:
