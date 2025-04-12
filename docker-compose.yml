@@ -69,11 +69,7 @@ services:
         environment:
             - VITE_API_URL=http://localhost:8000
         depends_on:
-            - backend
-        command: npm run dev
-        restart: always
-        networks:
-            - sn_network
+            - django
 
 networks:
     sn_network:
