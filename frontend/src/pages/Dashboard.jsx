@@ -1,8 +1,7 @@
-import { Avatar, Spinner } from "@material-tailwind/react";
 import { SideBar } from "../components/SideBar";
 import { CardInfo } from "../components/CardInfo";
 import { HorizontalCard } from "../components/HorizontalCard";
-import { BoltIcon, UserCircleIcon } from "@heroicons/react/24/solid";
+import { BoltIcon } from "@heroicons/react/24/solid";
 import { Activities } from "../components/Activitites";
 import { useEffect, useState } from "react";
 import { getTeams } from "../services/endpoints/teams";
@@ -26,7 +25,7 @@ export const Dashboard = ({ username }) => {
     };
     fetchData();
   }, []);
-  if (isLoading) return <isLoading />;
+  if (isLoading) return <div>Загрузка...</div>;
   return (
     <div className="h-screen w-screen flex bg-gray-50">
       <div>

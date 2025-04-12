@@ -3,7 +3,6 @@ import { AvatarGen } from "./AvatarGen";
 import { removeMember } from "../services/endpoints/teams";
 import { useState, useEffect } from "react";
 import { getUserById } from "../services/endpoints/users";
-import { formatRussianDateTime } from "../utils/dateUtils";
 
 export function TeamMembers({ members, owner, teamSlug, currentUser }) {
   const [membersList, setMembersList] = useState([]);
@@ -98,9 +97,9 @@ export function TeamMembers({ members, owner, teamSlug, currentUser }) {
               </Typography>
               {member.role === "Member" && currentUser === owner && (
                 <Button
-                  size="sm"
+                  variant="text"
                   color="red"
-                  className="mt-2"
+                  className="w-full"
                   onClick={() => handleOpenDeleteDialog(member)}
                 >
                   Удалить

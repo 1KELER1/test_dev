@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { editProfile, getProfile } from "../services/endpoints/users";
-import { Input, Spinner } from "@material-tailwind/react";
+import { Input } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-import { createTeam } from "../services/endpoints/teams";
 import { Loading } from "./Loading";
 
 export const ProfileDetails = ({isEdit, confirmEdit}) => {
   const [userInfo, setUserInfo] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+
   useEffect(()=>  {
     const handleEditProfile = async() => {
       try{
@@ -21,7 +21,8 @@ export const ProfileDetails = ({isEdit, confirmEdit}) => {
     if(confirmEdit){
       handleEditProfile();
     }
-  },[confirmEdit])
+  },[confirmEdit, userInfo, navigate])
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -35,13 +36,16 @@ export const ProfileDetails = ({isEdit, confirmEdit}) => {
     fetchProfile();
     setIsLoading(false);
   }, []);
+
   const handleInputChange = (key, value) => {
     setUserInfo((prevUserInfo) => ({
       ...prevUserInfo,
       [key]: value,
     }));
   };
+
   if (isLoading) return <Loading />
+  
   return (
     <div className="w-full flex flex-col mt-7 gap-5">
       {Object.entries(userInfo).map(([key, value],index) => (
@@ -52,7 +56,7 @@ export const ProfileDetails = ({isEdit, confirmEdit}) => {
         } />
         )
         :
-        <div className="relative   w-full bg-blue-gray-50 h-14 rounded-lg items-center p-5" key={index}>
+        <div className="relative w-full bg-blue-gray-50 h-14 rounded-lg items-center p-5" key={index}>
           <div>
             <span className="font-bold"> {key} : </span>
             <span>{value}</span>

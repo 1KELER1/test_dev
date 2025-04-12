@@ -8,7 +8,7 @@ import {
 import { DashboardProject } from "./DashboardProject";
 import { TaskList } from "./TaskList";
 import { NoteList } from "./NoteList";
-import { useState } from "react";
+
 export function ProjectMenu({ teamSlug, projectData, teamData, fetchData }) {
   const handleTabSelect = () => {
     fetchData();
