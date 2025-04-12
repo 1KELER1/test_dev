@@ -45,7 +45,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
-ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(',')
+ALLOWED_HOSTS = env('ALLOWED_HOSTS').split(',') + ['5.104.75.36']
 # Application definition
 
 INSTALLED_APPS = [
@@ -199,6 +199,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:3000',
     'http://localhost:8000',
     'http://127.0.0.1:8000',
+    'http://5.104.75.36',
 ]
 
 CORS_ALLOWED_HEADERS = [
